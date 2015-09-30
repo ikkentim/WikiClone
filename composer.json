@@ -2,6 +2,11 @@
     "name": "ikkentim/wikiclone",
     "description": "Create GitHub wiki mirrors with ease.",
     "license": "MIT",
+    "homepage": "http://wikiclone.timpotze.nl",
+    "support": {
+        "issues": "https://github.com/ikkentim/wikiclone/issues",
+        "source": "https://github.com/ikkentim/wikiclone"
+    },
     "authors": [
         {
             "name": "Tim Potze",
@@ -14,7 +19,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Ikkentim\\WikiClone\\": "src/"
+            "Ikkentim\\WikiClone\\": "src/Ikkentim/WikiClone"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
