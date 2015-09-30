@@ -1,6 +1,8 @@
 WikiClone
 =========
 
+[![Packagist](https://img.shields.io/packagist/dt/ikkentim/wikiclone.svg)](https://packagist.org/packages/ikkentim/wikiclone) [![Packagist](https://img.shields.io/packagist/v/ikkentim/wikiclone.svg)](https://packagist.org/packages/ikkentim/wikiclone)
+
 Mirror your GitHub wiki with ease.
 
 This Laravel 5 packages allows you to easily mirror the documentation on your GitHub wiki.
