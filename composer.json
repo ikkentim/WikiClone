@@ -1,0 +1,17 @@
+{
+    "name": "ikkentim/wikiclone",
+    "description": "Create GitHub wiki mirrors with ease.",
+    "type": "library",
+    "require": {
+        "gitonomy/gitlib": "^1.0@dev",
+        "michelf/php-markdown": "^1.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tim Potze",
+            "email": "timpotze@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
