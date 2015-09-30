@@ -19,11 +19,6 @@ class WikiCloneServiceprovider extends ServiceProvider {
         $router->middleware('verify.webhook', VerifyWebhookToken::class);
         $router->middleware('gollum.webhook', GollumWebhook::class);
 
-        if (!$this->app->routesAreCached())
-        {
-            require __DIR__ . '/Http/routes.php';
-        }
-
         $this->loadViewsFrom(__DIR__ . '/../..' . '/views', 'wikiclone');
     }
 
