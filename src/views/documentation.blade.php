@@ -2,7 +2,7 @@
 <html lang="en">
 {{-- This is the default, Bootstrap based, WikiClone documentation view. --}}
 {{-- You should customize this page to your own liking. --}}
-{{-- 5 variables are passed to this view, $title, $uri, $content, $sidebar and $footer --}}
+{{-- 5 variables are passed to this view, $title, $fileName, $content, $sidebar and $footer --}}
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -92,7 +92,7 @@
                         {{ $title }}
                         <small>
                             <a class="btn btn-link"
-                               href="{{ \Ikkentim\WikiClone\GitHubUrls::getWikiEditURL(config('wikiclone.repository'), $uri) }}">
+                               href="{{ \Ikkentim\WikiClone\GitHubUrls::getWikiEditURL(config('wikiclone.repository'), $fileName) }}">
                                 <i class="fa fa-github"></i> Edit this page on GitHub
                             </a>
                         </small>

@@ -5,34 +5,34 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DocumentationController extends Controller {
-    public function index($uri = null)
+    public function index($fileName = null)
     {
         $disk = Storage::disk(config('wikiclone.storage_provider'));
 
-        if (empty($uri) || $uri == '/')
+        if (empty($fileName) || $fileName == '/')
         {
-            $uri = config('wikiclone.default');
+            $fileName = config('wikiclone.default');
         }
 
         // Find the title of the page
-        $uri = strtolower($uri);
-        $uri = collect($disk->files())
-            ->filter(function ($in) use ($uri)
+        $fileName = strtolower($fileName);
+        $fileName = collect($disk->files())
+            ->filter(function ($in) use ($fileName)
             {
-                return strtolower($in) == strtolower($uri);
+                return strtolower($in) == strtolower($fileName);
             })
             ->first();
 
         // Check for existance of the requested documentation page
-        if (!$uri || !$disk->exists($uri))
+        if (!$fileName || !$disk->exists($fileName))
         {
             throw new NotFoundHttpException();
         }
 
         return view('wikiclone::documentation')
-            ->with('title', str_replace('-', ' ', $uri))
-            ->with('uri', $uri)
-            ->with('content', $disk->get($uri))
+            ->with('title', str_replace('-', ' ', $fileName))
+            ->with('fileName', $fileName)
+            ->with('content', $disk->get($fileName))
             ->with('sidebar', $disk->exists('_Sidebar') ? $disk->get('_Sidebar') : null)
             ->with('footer', $disk->exists('_Footer') ? $disk->get('_Footer') : null);
     }
