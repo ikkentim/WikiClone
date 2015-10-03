@@ -42,6 +42,11 @@
         a.title h2 {
             color: black;
         }
+
+        .navbar {
+            margin-bottom: 0;
+        }
+
         footer.footer {
             padding: 25px 0 150px;
             color: #777;
