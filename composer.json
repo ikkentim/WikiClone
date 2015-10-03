@@ -14,13 +14,12 @@
         }
     ],
     "require": {
-        "gitonomy/gitlib": "^1.0@dev",
+        "gitonomy/gitlib": "^0.1.7",
         "michelf/php-markdown": "^1.5"
     },
     "autoload": {
         "psr-4": {
             "Ikkentim\\WikiClone\\": "src/Ikkentim/WikiClone"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
