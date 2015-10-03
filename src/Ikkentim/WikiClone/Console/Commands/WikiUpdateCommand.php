@@ -54,7 +54,7 @@ class WikiUpdateCommand extends Command {
             $html = $parser->transform(file_get_contents("$localRepositoryPath/$file"));
             if (strlen(config('wikiclone.url_prefix')))
             {
-                $html = preg_replace('/<a href="((?!http:\/\/|https:\/\/|#).*)">(.*)<\/a>/g', '<a href="'
+                $html = preg_replace('/<a href="((?!http:\/\/|https:\/\/|#).*)">(.*)<\/a>/', '<a href="'
                                                                                               . config('wikiclone.url_prefix')
                                                                                               . '/$1">$2</a>', $html);
             }
