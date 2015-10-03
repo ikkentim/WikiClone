@@ -3,7 +3,7 @@
 use Gitonomy\Git\Admin;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use Michelf\MarkdownExtra;
+use Ikkentim\WikiClone\MarkdownDoc;
 
 class WikiUpdateCommand extends Command {
     /**
@@ -30,7 +30,7 @@ class WikiUpdateCommand extends Command {
         $disk = Storage::disk(config('wikiclone.storage_provider'));
         $repository = 'https://github.com/' . config('wikiclone.repository') . '.wiki.git';
         $localRepositoryPath = tempnam(sys_get_temp_dir(), 'repo');
-        $parser = new MarkdownExtra;
+        $parser = new MarkdownDoc;
 
         // Clone the wiki repository
         $this->info("Cloning into repository $repository...");
