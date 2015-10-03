@@ -18,7 +18,6 @@
         body {
             font-family: Roboto;
             background-color: #f0f0f0;
-            padding-top: 50px;
         }
 
         .content {
@@ -37,6 +36,17 @@
             color: #afafaf;
         }
 
+        a.title {
+            text-decoration: none;
+        }
+        a.title h2 {
+            color: black;
+        }
+
+        .navbar {
+            margin-bottom: 0;
+        }
+
         footer.footer {
             padding: 25px 0 150px;
             color: #777;
@@ -52,7 +62,7 @@
     <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
