@@ -52,7 +52,17 @@ class WikiUpdateCommand extends Command {
 
             // Convert markdown to html
             $html = $parser->transform(file_get_contents("$localRepositoryPath/$file"));
-            $html = str_replace('<table>', '<table class="table table-bordered table-striped">', $html);
+            if (strlen(config('wikiclone.url_prefix')))
+            {
+                $html = preg_replace('/<a href="((?!http:\/\/|https:\/\/|#).*)">(.*)<\/a>/g', '<a href="'
+                                                                                              . config('wikiclone.url_prefix')
+                                                                                              . '/$1">$2</a>', $html);
+            }
+
+            foreach(config('wikiclone.html_replacements') as $set)
+            {
+                $html = str_replace($set['search'], $set['replace'], $html);
+            }
 
             // Store the documentation
             $name = substr($file, 0, strlen($file) - strlen('.md'));

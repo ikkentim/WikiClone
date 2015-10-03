@@ -8,10 +8,23 @@ return [
     |
     | Here you can set the name of the repository the site will be mirroring
     | from GitHub. The value must be formatted 'username/repository'.
+    |
     */
 
-    'repository'       => 'ikkentim/wikiclone',
+    'repository'        => 'ikkentim/wikiclone',
 
+    /*
+    |--------------------------------------------------------------------------
+    | URL prefix
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the URL prefix used within the routes. If set to /wiki,
+    | requests to example.com/wiki/* will route to the documentation served
+    | from this mirror.
+    |
+    */
+
+    'url_prefix'        => '/wiki',
     /*
     |--------------------------------------------------------------------------
     | Default page
@@ -22,7 +35,7 @@ return [
     | the homepage of the website.
     |
     */
-    'default'          => 'Home',
+    'default'           => 'Home',
 
     /*
     |--------------------------------------------------------------------------
@@ -33,7 +46,7 @@ return [
     |
     */
 
-    'storage_provider' => 'local',
+    'storage_provider'  => 'local',
 
     /*
     |--------------------------------------------------------------------------
@@ -46,6 +59,21 @@ return [
     |
     */
 
-    'webhook_token'    => env('APP_KEY', 'MyWebhookToken')
+    'webhook_token'     => env('APP_KEY', 'MyWebhookToken'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | HTML replacements
+    |--------------------------------------------------------------------------
+    |
+    | The generated HTML might not be exactly to your liking. You can customize
+    | it by replacing certain elements to make it more easy for your
+    | CSS (framework) to digest.
+    |
+    */
+
+    'html_replacements' => [
+        ['search' => '<table>', 'replace' => '<table class="table table-bordered table-striped">']
+    ]
 
 ];
