@@ -3,15 +3,54 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | GitHub Wiki repository
+    | Repository
     |--------------------------------------------------------------------------
     |
-    | Here you can set the name of the repository the site will be mirroring
-    | from GitHub. The value must be formatted 'username/repository'.
+    | Here you can set the repository the site will be mirroring. If
+    | 'repository_type' is 'github_wiki' or 'github_repository' this value
+    | should be formatted as 'URL_OR_ORGANIZATION/REPOSITORY'; otherwise the
+    | full repository URL should be used.
     |
     */
 
     'repository'        => 'ikkentim/wikiclone',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Repository type
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the type of repository the site will be mirroring.
+    | Supported values: 'github_wiki', 'github_repository', 'repository'.
+    |
+    */
+
+    'repository_type'   => 'github_wiki',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Use tags?
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set whether the documentation for each tag should be
+    | downloaded.
+    |
+    */
+
+    'tags'              => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default tag
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the tag of which the documentation is displayed if no
+    | tag has been specified in the URL. This value only has effect if 'tags'
+    | is set to true.
+    |
+    */
+
+    'default_tag'       => 'master',
 
     /*
     |--------------------------------------------------------------------------
@@ -20,18 +59,32 @@ return [
     |
     | Here you can set the URL prefix used within the routes. If set to /wiki,
     | requests to example.com/wiki/* will route to the documentation served
-    | from this mirror.
+    | from this mirror. Use null if you wish to manually add the routes.
     |
     */
 
     'url_prefix'        => '/wiki',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Middleware
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the middleware the WikiClone routes should use.
+    |
+    */
+
+    'middleware'        => [
+        // 'web'
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Default page
     |--------------------------------------------------------------------------
     |
     | Here you can set the path used as the default page. If no page has been
-    | specified in the url this page will be displayed. Basically this is
+    | specified in the url this page will be displayed. This is basically
     | the homepage of the website.
     |
     */
@@ -73,7 +126,7 @@ return [
     */
 
     'html_replacements' => [
-        ['search' => '<table>', 'replace' => '<table class="table table-bordered table-striped">']
+        // ['search' => '<table>', 'replace' => '<table class="table table-bordered table-striped">']
     ]
 
 ];

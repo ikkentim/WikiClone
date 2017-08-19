@@ -1,10 +1,13 @@
 <?php namespace Ikkentim\WikiClone;
 
+use Ikkentim\WikiClone\Http\Controllers\DocumentationController;
+use Ikkentim\WikiClone\Http\Controllers\WebhookController;
 use Ikkentim\WikiClone\Http\Middleware\VerifyWebhookToken;
 use Ikkentim\WikiClone\Http\Middleware\GollumWebhook;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
-class WikiCloneServiceprovider extends ServiceProvider {
+class WikiCloneServiceProvider extends ServiceProvider {
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -21,7 +24,25 @@ class WikiCloneServiceprovider extends ServiceProvider {
 
         if (!$this->app->routesAreCached())
         {
-            require __DIR__ . '/Http/routes.php';
+            if(config('wikiclone.url_prefix') !== null) {
+                $middleware = config('wikiclone.middleware');
+
+                if($middleware == null) {
+                    $middleware = [];
+                }
+                Route::group(['middleware' => $middleware], function () {
+                    $prefix = config('wikiclone.url_prefix');
+                    $wc = WebhookController::class;
+                    $dc = DocumentationController::class;
+
+                    Route::post($prefix, "$wc@trigger");
+                    Route::get("$prefix/{page?}", "$dc@page")
+                        ->where('page', '(.*)');
+                    Route::get("$prefix/{tag}/{page?}", "$dc@pageWithTag")
+                        ->where('tag', '(.*)')
+                        ->where('page', '(.*)');
+                });
+            }
         }
 
         $this->loadViewsFrom(__DIR__ . '/../..' . '/views', 'wikiclone');

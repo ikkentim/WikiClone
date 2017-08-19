@@ -16,6 +16,11 @@ class GitHubUrls {
         return static::getRepositoryURL($repository) . 'releases/';
     }
 
+    public static function getIssuesURL($repository)
+    {
+        return static::getRepositoryURL($repository) . 'issues/';
+    }
+
     public static function getWikiURL($repository, $page = null)
     {
         return static::getRepositoryURL($repository) . 'wiki/' . $page;
