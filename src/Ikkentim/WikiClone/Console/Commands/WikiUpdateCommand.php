@@ -7,6 +7,7 @@ use Gitonomy\Git\Repository;
 use Ikkentim\WikiClone\MarkdownDoc;
 use Ikkentim\WikiClone\Page;
 use Illuminate\Console\Command;
+use Illuminate\Filesystem\FilesystemAdapter;
 
 class WikiUpdateCommand extends Command
 {
@@ -15,15 +16,20 @@ class WikiUpdateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'wiki:update {--force : Overwrite existing tags}';
+    protected $signature = 'wiki:update {--force : Overwrite existing tags} {--delete= : Delete a specific tag, allowing it\'s documentation to be rewritten}';
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Updates the contents of the wiki';
-
+    /**
+     * @var MarkdownDoc
+     */
     protected $parser;
+    /**
+     * @var FilesystemAdapter
+     */
     protected $disk;
     protected $localRepositoryPath;
     protected $repositoryUrl;
@@ -87,7 +93,8 @@ class WikiUpdateCommand extends Command
 
     private function deleteDocumentation($tag = null)
     {
-        $this->info("Clearing existing documentation");
+        $this->info("Clearing existing documentation of " . $tag);
+
         $this->disk->delete($this->disk->files($tag));
     }
 
@@ -134,6 +141,22 @@ class WikiUpdateCommand extends Command
         self::rrmdir($this->localRepositoryPath);
     }
 
+    private function isInWhitelist($list, $value)
+    {
+        $whitelist = config("wikiclone.{$list}_whitelist");
+        $blacklist = config("wikiclone.{$list}_blacklist");
+
+        if ($whitelist != null && !in_array($value, $whitelist)) {
+            return false;
+        }
+
+        if ($blacklist != null && in_array($value, $blacklist)) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Execute the console command.
      *
@@ -150,6 +173,10 @@ class WikiUpdateCommand extends Command
 
         $this->cloneRepository();
 
+        if($this->option('delete')) {
+            $this->deleteDocumentation($this->option('delete'));
+        }
+
         if (!$this->tags) {
             $this->info('Getting documentation from default branch...');
 
@@ -160,26 +187,43 @@ class WikiUpdateCommand extends Command
 
             /** @var Branch $branch */
             foreach ($refs->getBranches() as $branch) {
-                if (!Page::isValidTagName($branch->getName())) {
+                $localName = $branch->getName();
+                if($branch->isRemote()) {
+                    $localName = substr($localName, strlen('origin/'));
+                    if($refs->hasBranch($localName)) {
+                        continue;
+                    }
+                }
+                if (!Page::isValidTagName($localName) ||
+                    !$this->isInWhitelist('branches', $localName)
+                ) {
                     continue;
                 }
 
-                $this->info("Getting documentation from '{$branch->getName()}' branch...");
+                $this->info("Getting documentation from '{$localName}' branch...");
 
-                $this->deleteDocumentation($branch->getName());
+                $this->deleteDocumentation($localName);
 
                 // Checkout
-                $this->repository->getWorkingCopy()
-                    ->checkout($branch);
+                if($branch->isLocal()) {
+                    $this->repository->getWorkingCopy()
+                        ->checkout($branch);
+                }
+                else {
+                    $this->repository->getWorkingCopy()
+                        ->checkout($branch, $localName);
+                }
+
 
                 // Parse
-                $this->parse($branch->getName() . '/');
+                $this->parse($localName . '/');
             }
 
             /** @var Tag $tag */
             foreach ($refs->getTags() as $tag) {
                 if (!Page::isValidTagName($tag->getName()) ||
-                    (Page::tagExists($tag->getName()) && !$this->option('force'))
+                    (Page::tagExists($tag->getName()) && !$this->option('force')) ||
+                    !$this->isInWhitelist('tags', $tag->getName())
                 ) {
                     continue;
                 }

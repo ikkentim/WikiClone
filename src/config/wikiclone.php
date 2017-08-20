@@ -54,6 +54,58 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Branches whitelist
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the branches to include when 'tags' is true. If the
+    | value is null, all the branches are included.
+    |
+    */
+
+    'branches_whitelist'         => [
+        'master'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Branches blacklist
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the branches to exclude when 'tags' is true.
+    |
+    */
+
+    'branches_blacklist'         => [
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tags whitelist
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the tags to include when 'tags' is true. If the
+    | value is null, all the tags are included.
+    |
+    */
+
+    'tags_whitelist'         => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tags blacklist
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the tags to exclude when 'tags' is true.
+    |
+    */
+
+    'tags_blacklist'         => [
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | URL prefix
     |--------------------------------------------------------------------------
     |
