@@ -173,7 +173,7 @@ class WikiUpdateCommand extends Command
 
         $this->cloneRepository();
 
-        if($this->option('delete')) {
+        if ($this->option('delete')) {
             $this->deleteDocumentation($this->option('delete'));
         }
 
@@ -183,14 +183,25 @@ class WikiUpdateCommand extends Command
             $this->deleteDocumentation();
             $this->parse();
         } else {
+            if ($this->option('force')) {
+                $this->info('Forcibly deleted all files');
+                foreach ($this->disk->files() as $file) {
+                    $this->disk->delete($file);
+                }
+                foreach ($this->disk->directories() as $directory) {
+                    $this->disk->deleteDirectory($directory);
+                }
+            }
+
+
             $refs = $this->repository->getReferences();
 
             /** @var Branch $branch */
             foreach ($refs->getBranches() as $branch) {
                 $localName = $branch->getName();
-                if($branch->isRemote()) {
+                if ($branch->isRemote()) {
                     $localName = substr($localName, strlen('origin/'));
-                    if($refs->hasBranch($localName)) {
+                    if ($refs->hasBranch($localName)) {
                         continue;
                     }
                 }
@@ -205,11 +216,10 @@ class WikiUpdateCommand extends Command
                 $this->deleteDocumentation($localName);
 
                 // Checkout
-                if($branch->isLocal()) {
+                if ($branch->isLocal()) {
                     $this->repository->getWorkingCopy()
                         ->checkout($branch);
-                }
-                else {
+                } else {
                     $this->repository->getWorkingCopy()
                         ->checkout($branch, $localName);
                 }
@@ -222,7 +232,7 @@ class WikiUpdateCommand extends Command
             /** @var Tag $tag */
             foreach ($refs->getTags() as $tag) {
                 if (!Page::isValidTagName($tag->getName()) ||
-                    (Page::tagExists($tag->getName()) && !$this->option('force')) ||
+                    Page::tagExists($tag->getName()) ||
                     !$this->isInWhitelist('tags', $tag->getName())
                 ) {
                     continue;
