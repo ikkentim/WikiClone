@@ -102,7 +102,13 @@ class Page
             return [];
         }
 
-        return collect(self::disk()->directories());
+        $tags = collect(self::disk()->directories());
+        $fn = config('wikiclone.tags_sort');
+
+        return $fn == null
+            ? $tags
+            : $tags->sort($fn)
+                ->values();
     }
 
     static function tagExists($tag = null)

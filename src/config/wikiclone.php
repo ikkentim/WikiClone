@@ -54,6 +54,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Tags sort comparer
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the tags comparer function to sort the tags.
+    |
+    */
+
+    'tags_sort'         => function($l, $r) {
+        $l_version = starts_with($l, ['0', 'v0']);
+        $r_version = starts_with($r, ['0', 'v0']);
+
+        if($l_version && !$r_version) {
+            return 1;
+        }
+        if(!$l_version && $r_version) {
+            return -1;
+        }
+        return strcmp($r, $l);
+    },
+    /*
+    |--------------------------------------------------------------------------
     | Branches whitelist
     |--------------------------------------------------------------------------
     |
