@@ -51,7 +51,8 @@ class Page
 
         $ret = collect(self::disk()->files($tag))
             ->first(function ($idx, $in) use ($name) {
-                return strtolower($in) == strtolower($name);
+                $v = is_string($idx) ? $idx : $in;
+                return strtolower($v) == strtolower($name);
             });
 
 
