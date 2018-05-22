@@ -19,16 +19,6 @@ Installation
         Ikkentim\WikiClone\WikiCloneServiceProvider::class,
 ```
 
-- Add the following routes to your `app/Http/routes.php` file (*feel free to modify the URLs*):
-
-
-``` php
-Route::post('/', '\Ikkentim\WikiClone\Http\Controllers\WebhookController@trigger');
-Route::get('/{page?}', '\Ikkentim\WikiClone\Http\Controllers\DocumentationController@index')
-    ->where('page', '(.*)');
-```
-
-- **Important!** The webhook used to update the website when the GitHub wiki is updated can't function properly when you have enabled the `VerifyCsrfToken` middleware (which is enabled by default). You can disable it by editing `app/Http/Kernel.php` and removing `\App\Http\Middleware\VerifyCsrfToken::class`. If you're using this Laravel installation for other things besides WikiClone, be sure to re-enable the `VerifyCsrfToken` middleware for routers other than the ones you added above to keep your website secure.
 - Publish the assets from this package using the `php artisan vendor:publish` command.
 - Open the `config/wikiclone.php` configuration file and edit the `repository` value to the github repository you intend to mirror.
 - Configure a webhook on the GitHub repository you're mirroring. 
