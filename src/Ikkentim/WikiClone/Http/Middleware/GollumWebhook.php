@@ -12,7 +12,8 @@ class GollumWebhook {
      */
     public function handle($request, Closure $next)
     {
-        if ($request->header('X-GitHub-Event') !== 'gollum')
+        $event = $request->header('X-GitHub-Event');
+        if ($event !== 'gollum' && $event != 'push' && $event != 'create' && $event != 'delete')
         {
             return response('Page not found', 404);
         }
