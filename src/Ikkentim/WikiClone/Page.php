@@ -2,6 +2,7 @@
 
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
+use Ikkentim\WikiClone\GitHubUrls;
 
 class Page
 {
@@ -44,13 +45,18 @@ class Page
         $name = self::sanitizeName($name);
         $tag = self::sanitizeTag($tag);
 
-        $name = $tag . '/' . $name;
+        if($tag !== null) {
+            $name = $tag . '/' . $name;
+        }
+
         $ret = collect(self::disk()->files($tag))
-            ->first(function ($in) use ($name) {
+            ->first(function ($idx, $in) use ($name) {
                 return strtolower($in) == strtolower($name);
             });
 
-        return array_last(explode('/', $ret));
+
+        $exp = explode('/', $ret);
+        return $exp[sizeof($exp) - 1];
     }
 
 
@@ -114,7 +120,7 @@ class Page
     static function tagExists($tag = null)
     {
         if (!config('wikiclone.tags')) {
-            return true;
+            return $tag === null;
         }
 
         if ($tag != null) {
@@ -126,6 +132,10 @@ class Page
 
     static function provide($name = null, $tag = null)
     {
+        if($tag !== null && !config('wikiclone.tags')) {
+            return null;
+        }
+
         $tag = self::sanitizeTag($tag);
 
         if (!self::tagExists($tag)) {
@@ -142,5 +152,46 @@ class Page
             return self::disk()->get($name);
         }
         return self::disk()->get($tag . '/' . $name);
+    }
+
+    static function editUrl($name = null, $tag = null)
+    {
+        $repoType = config('wikiclone.repository_type');
+        $editTag = config('wikiclone.edit_tag');
+
+        if($repoType !== 'github_wiki' && $repoType !== 'github_repository') {
+            return null;
+        }
+
+        if($editTag == null) {
+            return null;
+        }
+
+        if($tag !== null && !config('wikiclone.tags')) {
+            return null;
+        }
+
+        $tag = self::sanitizeTag($tag);
+
+        if($editTag != $tag && $repoType == 'github_repository') {
+            return null;
+        }
+
+        if(!self::tagExists($tag)) {
+            return null;
+        }
+
+        $name = self::toNameOnDisk($name, $tag);
+
+        if (!self::existsInternal($name, $tag)) {
+            return null;
+        }
+
+        switch($repoType) {
+            case 'github_wiki':
+                return GitHubUrls::getWikiURL(config('wikiclone.repository'), $name);
+            case 'github_repository':
+                return GitHubUrls::getFileURL(config('wikiclone.repository'), config('wikiclone.default_tag'), $name);
+        }
     }
 }

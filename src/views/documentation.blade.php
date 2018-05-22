@@ -77,7 +77,7 @@
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="{{ url('/') }}">Documentation</a>
+                    <a href="{{ url('/') }}">Home</a>
                 </li>
                 <li>
                     <a href="{{\Ikkentim\WikiClone\GitHubUrls::getRepositoryURL(config('wikiclone.repository')) }}">Github</a>
@@ -86,6 +86,19 @@
                     <a href="{{ \Ikkentim\WikiClone\GitHubUrls::getReleasesURL(config('wikiclone.repository')) }}">Download</a>
                 </li>
             </ul>
+
+            @if (isset($tags) && count($tags) > 1)
+            <ul class="nav navbar-nav navbar-right">
+               <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" id="version-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> {{ $tag }} <span class="caret"></span> </a> 
+                  <ul class="dropdown-menu" aria-labelledby="version-dropdown">
+                     @foreach ($tags as $value)
+                     <li><a href="{{url(config('wikiclone.url_prefix') . "/$value/$fileName")}}">{{ $value }}</a></li>
+                     @endforeach
+                  </ul>
+               </li>
+            </ul>
+            @endif
         </div>
     </div>
 </nav>
@@ -100,12 +113,14 @@
                 <div class="page-header">
                     <h1>
                         {{ $title }}
-                        <small>
-                            <a class="btn btn-link"
-                               href="{{ \Ikkentim\WikiClone\GitHubUrls::getWikiEditURL(config('wikiclone.repository'), $fileName) }}">
-                                <i class="fa fa-github"></i> Edit this page on GitHub
-                            </a>
-                        </small>
+                        @if($editUrl !== null)
+                            <small>
+                                <a class="btn btn-link"
+                                   href="{{ $editUrl }}">
+                                    <i class="fa fa-github"></i> Edit this page on GitHub
+                                </a>
+                            </small>
+                        @endif
                     </h1>
                 </div>
                 <div class="row">

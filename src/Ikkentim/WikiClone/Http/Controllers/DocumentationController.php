@@ -24,6 +24,13 @@ class DocumentationController extends Controller
             $fileName = $pathComponents[0];
         }
 
+        if($tag === '') {
+            $tag = null;
+        }
+        if($fileName === '') {
+            $fileName = null;
+        }
+
         // Find page
         $page = Page::provide($fileName, $tag);
 
@@ -45,6 +52,7 @@ class DocumentationController extends Controller
         return view('wikiclone::documentation')
             ->with('title', str_replace('-', ' ', $fileName))
             ->with('fileName', $fileName)
+            ->with('editUrl', Page::editUrl($fileName, $tag))
             ->with('content', $page)
             ->with('sidebar', Page::provide('_Sidebar', $tag))
             ->with('footer', Page::provide('_Footer', $tag))

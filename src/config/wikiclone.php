@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     /*
@@ -54,25 +55,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Tags sort comparer
+    | Edit tag
     |--------------------------------------------------------------------------
     |
-    | Here you can set the tags comparer function to sort the tags.
+    | Here you can set the name of the branch which is editable on GitHub if
+    | repository_type is set to github_repository. No edit link will be
+    | displayed when:
+    | - Documentation is viewed with a different tag or branch name.
+    | - This value is null.
+    | - repository_type is not set to github_wiki or github_repository.
     |
-    */
+     */
 
-    'tags_sort'         => function($l, $r) {
-        $l_version = starts_with($l, ['0', 'v0']);
-        $r_version = starts_with($r, ['0', 'v0']);
+    'edit_tag'          => 'master',
 
-        if($l_version && !$r_version) {
-            return 1;
-        }
-        if(!$l_version && $r_version) {
-            return -1;
-        }
-        return strcmp($r, $l);
-    },
     /*
     |--------------------------------------------------------------------------
     | Branches whitelist
@@ -83,9 +79,7 @@ return [
     |
     */
 
-    'branches_whitelist'         => [
-        'master'
-    ],
+    'branches_whitelist'         => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +116,8 @@ return [
     */
 
     'tags_blacklist'         => [
-
+        '0.2',
+        '0.1',
     ],
 
     /*
@@ -136,7 +131,7 @@ return [
     |
     */
 
-    'url_prefix'        => '/wiki',
+    'url_prefix'        => '',
 
     /*
     |--------------------------------------------------------------------------
@@ -172,7 +167,7 @@ return [
     |
     */
 
-    'storage_provider'  => 'local',
+    'storage_provider'  => 'wiki',
 
     /*
     |--------------------------------------------------------------------------
@@ -199,7 +194,7 @@ return [
     */
 
     'html_replacements' => [
-        // ['search' => '<table>', 'replace' => '<table class="table table-bordered table-striped">']
+        '<code>' => '<code class="hljs">'
     ]
 
 ];

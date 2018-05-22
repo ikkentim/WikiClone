@@ -30,4 +30,9 @@ class GitHubUrls {
     {
         return static::getWikiURL($repository, $page) . '/_edit';
     }
+
+    public static function getFileURL($repository, $branch, $page)
+    {
+        return static::getRepositoryURL($repository) . "blob/$branch/$page.md";
+    }
 }

@@ -36,11 +36,8 @@ class WikiCloneServiceProvider extends ServiceProvider {
                     $dc = DocumentationController::class;
 
                     Route::post($prefix, "$wc@trigger");
-                    Route::get("$prefix/{page?}", "$dc@page")
-                        ->where('page', '(.*)');
-                    Route::get("$prefix/{tag}/{page?}", "$dc@pageWithTag")
-                        ->where('tag', '(.*)')
-                        ->where('page', '(.*)');
+                    Route::get("$prefix/{path?}", "$dc@index")
+                        ->where('path', '(.*)');
                 });
             }
         }
